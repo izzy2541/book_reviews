@@ -9,6 +9,10 @@ class Review extends Model
 {
     use HasFactory;
 
+    //fillable is a property on a model that lets you specify that some properties can be
+    //mass assigned
+    protected $fillable = ['review', 'rating'];
+
     public function book()
     {
         //specifies inverse relationship between review and book tables,
