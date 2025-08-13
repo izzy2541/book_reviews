@@ -3,7 +3,14 @@
 {{-- this section is replaced by @yield('content') in app.blade.php --}}
 @section('content')
     <h1 class="mb-10 text-2xl">Books</h1>
-    <form></form>
+    <form method="GET" action="{{ route('books.index')}}" class="mb-4 flex items-center space-x-2">
+        <input type="text" name="title" placeholder="Search by title"
+        {{-- if weve sent the form before, the input might be populated with the previous value we have used
+            for the filer --}}
+        value="{{ request('title')}}" class="input h-10"/>
+        <button type="submit" class="btn h-10">Search</button>
+        <a href="{{ route('books.index') }}" class="btn h-10">Clear</a>
+    </form>
     <ul>
         @forelse ($books as $book)
         <li class="mb-4">
