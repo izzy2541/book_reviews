@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class Book extends Model
@@ -19,7 +19,7 @@ class Book extends Model
 
     //query scopes always have to be prefixed with "scope", then
     //can be followed by anything
-    public function scopeTitle(Builder $query, string $title): Builder|QueryBuilder
+    public function scopeTitle(Builder $query, string $title): Builder
     {
         return $query->where('title', 'LIKE', '%' . $title . '%');
     }
