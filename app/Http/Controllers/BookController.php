@@ -17,7 +17,7 @@ class BookController extends Controller
 
         $books = Book::when(
             $title,
-            fn($query, $title) => $query->title($title)
+            fn ($query, $title) => $query->title($title)
         );
 
         //match is similar to a switch statement
@@ -53,9 +53,16 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Book $book)
     {
-        //
+        return view(
+            'books.show',
+            // load method lets you load certain relations
+            ['book' => $book->load([
+                // latest is a query scope built into laravel
+                'reviews' => fn ($query) => $query->latest()
+            ])]
+        );
     }
 
     /**

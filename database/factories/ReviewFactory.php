@@ -17,10 +17,13 @@ class ReviewFactory extends Factory
     public function definition(): array
     {
         return [
-           'book_id'=> null,
-           'review' => fake()->numberBetween(1,5),
-           'created_at' => fake()->dateTimeBetween('-2 years'),
-           'updated_at' => fake()->dateTimeBetween('created_at', 'now'),
+            'book_id' => null,
+            'review' => fake()->paragraph,
+            'rating' => fake()->numberBetween(1, 5),
+            'created_at' => fake()->dateTimeBetween('-2 years'),
+            'updated_at' => function (array $attributes) {
+                return fake()->dateTimeBetween($attributes['created_at'], 'now');
+            },
         ];
     }
 
@@ -28,7 +31,7 @@ class ReviewFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'rating' => fake()->numberBetween(4,5)
+                'rating' => fake()->numberBetween(4, 5)
             ];
         });
     }
@@ -37,7 +40,7 @@ class ReviewFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'rating' => fake()->numberBetween(2,5)
+                'rating' => fake()->numberBetween(2, 5)
             ];
         });
     }
@@ -46,7 +49,7 @@ class ReviewFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'rating' => fake()->numberBetween(1,3)
+                'rating' => fake()->numberBetween(1, 3)
             ];
         });
     }
