@@ -27,7 +27,7 @@ class BookController extends Controller
             'popular_last_6months' => $books->popularLast6Months(),
             'highest_rated_last_month' => $books->highestRatedLastMonth(),
             'highest_rated_last_6months' => $books->highestRatedLast6Months(),
-            default => $books->latest()
+            default => $books->latest()->withAvgRating()->withReviewsCount()
         };
 
         //arguments are key, how long you want to store the data in seconds, function that will return the actual data
@@ -38,7 +38,13 @@ class BookController extends Controller
         //remember will see whether the file or redis server already contains the key,
         //if not, it will run function in 3rd argument.
         $cacheKey = 'books:' . $filter . ':' . $title;
-        $books = Cache::remember($cacheKey, 3600, fn() => $books->get());
+        $books =
+        Cache::remember(
+            $cacheKey,
+            3600,
+            fn() =>
+            $books->get()
+        );
 
         return view('books.index', ['books' => $books]);
     }
@@ -62,14 +68,21 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Book $book)
+    //itn = type integer
+    public function show(int $id)
     {
 
-            $cacheKey = 'book:' . $book->id;
+            $cacheKey = 'book:' . $id;
 
-            $book = Cache::remember($cacheKey, 3600, fn() => $book->load(
+            $book = Cache::remember(
+            $cacheKey,
+            3600,
+            fn() =>
+            //this is how to fetch relations together with model at the same time
+            Book::with(
                ['reviews' => fn ($query) => $query->latest()
-            ]));
+            ])->withAvgRating()->withReviewsCount()->findOrFail($id)
+        );
             return view('books.show', ['book' => $book]);
     }
 
