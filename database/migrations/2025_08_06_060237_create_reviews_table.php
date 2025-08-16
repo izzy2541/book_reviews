@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('book_id');
+            // $table->unsignedBigInteger('book_id');
 
             $table->text('review');
             $table->unsignedTinyInteger('rating');
@@ -23,10 +23,12 @@ return new class extends Migration
             //creating relationship between books and reviews tables by defining a
             //column that will reference the other table
             //book_id is a foreign key, references here specifies which column to reference
-            $table->foreign('book_id')->references('id')->on('books')
+            // $table->foreignId('book_id')->references('id')->on('books')
             //this specifies that when a book is deleted from the db, all related reviews
             //should be removed too
-            ->onDelete('cascade');
+            // ->onDelete('cascade');
+            $table->foreignId('book_id')->constrained()
+            ->cascadeOnDelete();
         });
     }
 

@@ -64,14 +64,13 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        return view(
-            'books.show',
-            // load method lets you load certain relations
-            ['book' => $book->load([
-                // latest is a query scope built into laravel
-                'reviews' => fn ($query) => $query->latest()
-            ])]
-        );
+
+            $cacheKey = 'book:' . $book->id;
+
+            $book = Cache::remember($cacheKey, 3600, fn() => $book->load(
+               ['reviews' => fn ($query) => $query->latest()
+            ]));
+            return view('books.show', ['book' => $book]);
     }
 
     /**
